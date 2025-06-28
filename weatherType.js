@@ -1,3 +1,4 @@
+// Data object for weather icons.
 export const weatherType = {
     Thunderstorm: {
         icon: 'thunderstorm',

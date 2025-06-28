@@ -12,11 +12,13 @@ const Weather = () => {
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
 
+  // Updates location when user enters text
   const handleLocationChange = (text) => {
     setLocation(text);
     setError(null);
   };
 
+  // Fetch weather data from API
   const getWeatherData = async () => {
     try {
       const data = await getWeather(location);
@@ -26,6 +28,7 @@ const Weather = () => {
   }
 };
 
+// Returns weather icon based on weather type
 const getWeatherIcon = () => {
   if (!weather) {
     return null;
