@@ -43,6 +43,7 @@ const getWeatherIcon = () => {
 const iconData = getWeatherIcon();
 
 const weatherData = weather ? [
+  { key: 'currentTime', text: new Date().toLocaleTimeString() },
   { key: 'location', text: `${weather.name}, ${weather.sys.country}` },
   { key: 'temperature', text: `${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C` },
   { key: 'conditions', text: weather.weather[0].description },
