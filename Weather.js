@@ -46,7 +46,8 @@ const iconData = getWeatherIcon();
 const weatherData = weather ? [
   { key: 'location', text: `${weather.name}, ${weather.sys.country}` },
   { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z') },
-  { key: 'temperature', text: `${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C` },
+  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C` },
+  { key: 'feelsLike', text: `Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C` },
   { key: 'conditions', text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1) },
   { key: 'icon', icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} /> },
 ] : [];
