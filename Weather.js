@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, ScrollView } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment-timezone';
 import getWeather from './api';
 import { weatherType } from './weatherType.js';
 
@@ -43,8 +44,8 @@ const getWeatherIcon = () => {
 const iconData = getWeatherIcon();
 
 const weatherData = weather ? [
-  { key: 'currentTime', text: new Date().toLocaleTimeString() },
   { key: 'location', text: `${weather.name}, ${weather.sys.country}` },
+  { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z') },
   { key: 'temperature', text: `${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C` },
   { key: 'conditions', text: weather.weather[0].description },
   { key: 'icon', icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} /> },
