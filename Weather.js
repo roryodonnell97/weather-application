@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment-timezone';
@@ -44,11 +44,10 @@ const getWeatherIcon = () => {
 const iconData = getWeatherIcon();
 
 const weatherData = weather ? [
-  { key: 'location', text: `${weather.name}, ${weather.sys.country}` },
-  { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z') },
-  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C` },
-  { key: 'feelsLike', text: `Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C` },
-  { key: 'conditions', text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1) },
+  { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
+  { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z'), style: styles.localTime },
+  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C | Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C`, style: styles.temperature },
+  { key: 'conditions', text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1), style: styles.conditions },
   { key: 'icon', icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} /> },
 ] : [];
 
@@ -64,17 +63,18 @@ const weatherData = weather ? [
               onChangeText={handleLocationChange}
               placeholder="City, State or Zip Code"
             />
-            <Button title="Get Weather" onPress={getWeatherData} />
+            <TouchableOpacity style={styles.getWeatherbutton} onPress={getWeatherData}>
+              <Text>Get Weather</Text>
+            </TouchableOpacity>
           </View>
           {error ? (
             <Text style={styles.error}>{error}</Text>
           ) : weather ? (
             <View style={styles.weatherData}>
               {weatherData.map((item) => (
-                <View key={item.key}>
-                  {<Text style={styles.outputText}>{item.text}</Text>}
-                  {item.icon}
-                </View>
+                  <View key={item.key}>
+                    {item.icon ? item.icon : <Text style={item.style}>{item.text}</Text>}
+                  </View>
               ))}
             </View>
           ) : (
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   scrollView: {
-    backgroundColor: 'lightblue',
+    backgroundColor: 'lightgreen',
     marginHorizontal: 20,
     padding: 20,
     borderRadius: 10,
@@ -106,15 +106,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    width: '100%',
+    maxWidth: 500,
   },
   instructions: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  getWeatherbutton: {
+    alignItems: 'center',
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 20,
+  },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
   },
   input: {
     width: 200,
@@ -132,9 +143,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     fontSize: 18,
   },
-  outputText: {
+  location: {
     fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  localTime: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  temperature: {
+    fontSize: 10,
+    marginBottom: 10,
+  },
+  feelsLike: {
+    fontSize: 10,
+    marginBottom: 10,
+  },
+  conditions : {
+    fontSize: 20,
+    marginBottom: 10,
   },
 });
 
