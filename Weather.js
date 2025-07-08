@@ -46,9 +46,13 @@ const iconData = getWeatherIcon();
 const weatherData = weather ? [
   { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
   { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z'), style: styles.localTime },
-  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C | Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C`, style: styles.temperature },
-  { key: 'conditions', text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1), style: styles.conditions },
-  { key: 'icon', icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} /> },
+  { 
+    key: 'conditions', 
+    text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1), 
+    icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} />, 
+    style: styles.conditions 
+  },
+  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
 ] : [];
 
   return (
@@ -72,9 +76,16 @@ const weatherData = weather ? [
           ) : weather ? (
             <View style={styles.weatherData}>
               {weatherData.map((item) => (
-                  <View key={item.key}>
-                    {item.icon ? item.icon : <Text style={item.style}>{item.text}</Text>}
-                  </View>
+                <View key={item.key}>
+                  {item.icon ? 
+                    <View style={styles.conditionsContainer}>
+                      <Text style={item.style}>{item.text}</Text>
+                      {item.icon}
+                    </View> 
+                    : 
+                    <Text style={item.style}>{item.text}</Text>
+                  }
+                </View>
               ))}
             </View>
           ) : (
@@ -116,7 +127,7 @@ const styles = StyleSheet.create({
   },
   getWeatherbutton: {
     alignItems: 'center',
-    backgroundColor: 'blue',
+    backgroundColor: 'lightblue',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -141,7 +152,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: 18,
+  },
+  conditionsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   location: {
     fontSize: 24,
@@ -149,20 +163,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   localTime: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 10,
   },
   temperature: {
-    fontSize: 10,
-    marginBottom: 10,
-  },
-  feelsLike: {
-    fontSize: 10,
+    fontSize: 18,
     marginBottom: 10,
   },
   conditions : {
     fontSize: 20,
     marginBottom: 10,
+    marginRight: 20,
   },
 });
 
