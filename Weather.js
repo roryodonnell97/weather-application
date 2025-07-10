@@ -8,6 +8,10 @@ import { weatherType } from './weatherType.js';
 
 console.log(weatherType);
 
+// Load the Ionicons font
+Icon.loadFont();
+
+// State variables
 const Weather = () => {
   const [location, setLocation] = useState('');
   const [weather, setWeather] = useState(null);
@@ -43,6 +47,18 @@ const getWeatherIcon = () => {
 
 const iconData = getWeatherIcon();
 
+
+// Returns wind direction letters
+const getWindDirection = (degrees) => {
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const index = Math.round(degrees / 45) % 8;
+  return directions[index];
+};
+
+const windDirection = getWindDirection(weather?.wind.deg);
+const windGust = weather?.wind.gust ? weather.wind.gust : 0;
+
+// Layout of weather data
 const weatherData = weather ? [
   { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
   { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z'), style: styles.localTime },
@@ -53,6 +69,11 @@ const weatherData = weather ? [
     style: styles.conditions 
   },
   { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
+  { key: 'wind',
+    icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weather.wind.deg}deg` }] }]} />,
+    text: `Wind: ${weather.wind.speed} mph  Gust: ${windGust} m/s  Direction: ${windDirection}`, 
+    style: styles.wind 
+  },
 ] : [];
 
   return (
@@ -172,8 +193,12 @@ const styles = StyleSheet.create({
   },
   conditions : {
     fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 20,
     marginRight: 20,
+  },
+  wind: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 });
 
