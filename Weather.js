@@ -5,8 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment-timezone';
 import getWeather from './api';
 import { weatherType } from './weatherType.js';
+import MapView, { Marker } from 'react-native-maps';
 
-console.log(weatherType);
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -55,7 +55,10 @@ const getWindDirection = (degrees) => {
   return directions[index];
 };
 
+// Wind direction 
 const windDirection = getWindDirection(weather?.wind.deg);
+
+// If wind gust is not available, set it to 0
 const windGust = weather?.wind.gust ? weather.wind.gust : 0;
 
 // Layout of weather data
@@ -111,6 +114,25 @@ const weatherData = weather ? [
             </View>
           ) : (
             <Text>Loading...</Text>
+          )}
+          {weather && (
+            <MapView
+              style={styles.map}
+              showsUserLocation={false}
+              region={{
+                latitude: weather.coord.lat,
+                longitude: weather.coord.lon,
+                latitudeDelta: 5.0,
+                longitudeDelta: 5.0,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: weather.coord.lat,
+                  longitude: weather.coord.lon,
+                }}
+              />
+            </MapView>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -199,6 +221,10 @@ const styles = StyleSheet.create({
   wind: {
     fontSize: 18,
     marginBottom: 10,
+  },
+  map: {
+    height: 200,
+    width: '100%',
   },
 });
 

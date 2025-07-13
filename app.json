@@ -18,6 +18,9 @@
         "UIAppFonts": [
           "Ionicons.ttf"
         ]
+      },
+      "config": {
+        "googleMapsApiKey": "XXXXXXXXXX"
       }
     },
     "android": {
