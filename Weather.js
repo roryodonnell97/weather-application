@@ -238,10 +238,11 @@ const styles = StyleSheet.create({
   temperature: {
     fontSize: 16,
     marginBottom: 10,
+    marginTop: 10,
   },
   conditions : {
     fontSize: 20,
-    marginBottom: 20,
+    marginBottom: 10,
     marginRight: 20,
   },
   wind: {
