@@ -74,7 +74,7 @@ const weatherData = weather ? [
   { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
   { key: 'wind',
     icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weather.wind.deg}deg` }] }]} />,
-    text: `Wind: ${weather.wind.speed} mph  Gust: ${windGust} m/s  Direction: ${windDirection}`, 
+    text: `Wind: ${weather.wind.speed} mph    Direction: ${windDirection}`, 
     style: styles.wind 
   },
 ] : [];
@@ -84,7 +84,7 @@ const weatherData = weather ? [
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.instructions}>
-            <Text style={styles.header}>Enter Location:</Text>
+            <Text style={styles.header}>Enter Location</Text>
             <TextInput
               style={styles.input}
               value={location}
@@ -92,7 +92,7 @@ const weatherData = weather ? [
               placeholder="City, State or Zip Code"
             />
             <TouchableOpacity style={styles.getWeatherbutton} onPress={getWeatherData}>
-              <Text>Get Weather</Text>
+              <Text>Search</Text>
             </TouchableOpacity>
           </View>
           {error ? (
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   scrollView: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: 'lightblue',
     marginHorizontal: 20,
     padding: 20,
     borderRadius: 10,
@@ -170,16 +170,19 @@ const styles = StyleSheet.create({
   },
   getWeatherbutton: {
     alignItems: 'center',
-    backgroundColor: 'lightblue',
+    backgroundColor: 'cyan',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 40,
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginTop: 20,
+    color: 'black',
+
   },
   input: {
     width: 200,
@@ -187,6 +190,17 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   error: {
     color: 'red',
@@ -195,6 +209,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 5,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    padding: 20,
+    marginBottom: 20,
   },
   conditionsContainer: {
     flexDirection: 'row',
@@ -210,7 +236,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   temperature: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
   },
   conditions : {
@@ -219,12 +245,25 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   wind: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
   },
   map: {
     height: 200,
     width: '100%',
+    marginTop: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    marginBottom: 20,
+    backgroundColor: 'lightblue',
+    
   },
 });
 
