@@ -1,8 +1,8 @@
 import React from 'react';
-import Weather from './Weather';
+import AppNavigator from './Navigation';
 
 export default function App() {
   return (
-    <Weather />
+    <AppNavigator />
   );
 }

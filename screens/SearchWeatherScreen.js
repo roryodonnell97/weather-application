@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button  } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment-timezone';
-import getWeather from './api';
-import { weatherType } from './weatherType.js';
+import getWeather from '../api.js';
+import { weatherType } from '../weatherType.js';
 import MapView, { Marker } from 'react-native-maps';
-
+import { useNavigation } from '@react-navigation/native';
 
 // Load the Ionicons font
 Icon.loadFont();
 
 // State variables
-const Weather = () => {
+const SearchWeatherScreen = () => {
   const [location, setLocation] = useState('');
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
@@ -61,6 +61,8 @@ const windDirection = getWindDirection(weather?.wind.deg);
 // If wind gust is not available, set it to 0
 const windGust = weather?.wind.gust ? weather.wind.gust : 0;
 
+const navigation = useNavigation();
+
 // Layout of weather data
 const weatherData = weather ? [
   { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
@@ -83,6 +85,9 @@ const weatherData = weather ? [
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
+          <View>
+            <Button title="Current Location" onPress={() => navigation.navigate('CurrentLocationWeatherScreen')} />
+          </View>
           <View style={styles.instructions}>
             <Text style={styles.header}>Enter Location</Text>
             <TextInput
@@ -112,9 +117,7 @@ const weatherData = weather ? [
                 </View>
               ))}
             </View>
-          ) : (
-            <Text>Loading...</Text>
-          )}
+          ) : null}
           {weather && (
             <MapView
               style={styles.map}
@@ -268,4 +271,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Weather;
+export default SearchWeatherScreen;
