@@ -10,7 +10,7 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Search Location Screen" component={SearchWeatherScreen} />
+        <Stack.Screen name="SearchWeatherScreen" component={SearchWeatherScreen} />
         <Stack.Screen name="CurrentLocationWeatherScreen" component={CurrentLocationWeatherScreen} />
       </Stack.Navigator>
     </NavigationContainer>

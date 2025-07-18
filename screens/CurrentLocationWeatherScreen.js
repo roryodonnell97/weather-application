@@ -1,7 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import * as Location from 'expo-location';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button  } from 'react-native';
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment-timezone';
 import getWeather from '../api.js';
+import { weatherType } from '../weatherType.js';
+import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
+import { getWeatherIcon, getWindDirection } from '../weatherUtils.js';
+import { styles } from './SearchWeatherScreen';
+
+// Load the Ionicons font
+Icon.loadFont();
 
 const CurrentLocationWeatherScreen = () => {
   const [weatherData, setWeatherData] = useState(null);
@@ -33,6 +44,28 @@ const CurrentLocationWeatherScreen = () => {
     })();
   }, []);
 
+  const iconData = getWeatherIcon(weatherData);
+  const windDirection = getWindDirection(weatherData?.wind.deg);
+  const navigation = useNavigation();
+
+  // Layout of weather data
+  const currentLocationWeatherData = weatherData ? [
+    { key: 'location', text: `${weatherData.name}, ${weatherData.sys.country}`, style: styles.location },
+    { key: 'localTime', text: moment().utcOffset(weatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
+    { 
+      key: 'conditions', 
+      text: weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1), 
+      icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} />, 
+      style: styles.conditions 
+    },
+    { key: 'temperature', text: `Temperature: ${((weatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
+    { key: 'wind',
+      icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weatherData.wind.deg}deg` }] }]} />,
+      text: `Wind: ${weatherData.wind.speed} mph    Direction: ${windDirection}`, 
+      style: styles.wind 
+    },
+  ] : [];
+
   if (error) {
     return (
       <View>
@@ -42,17 +75,56 @@ const CurrentLocationWeatherScreen = () => {
   }
 
   if (!weatherData) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
+    return [];
   }
 
   return (
-    <View>
-      <Text>Temperature: {weatherData.main.temp}°F</Text>
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container} edges={['top']}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.instructions}>
+            <Text style={styles.header}>Current Location</Text>
+          </View>
+          {error ? (
+            <Text style={styles.error}>{error}</Text>
+          ) : weatherData ? (
+            <View style={styles.searchWeatherData}>
+              {currentLocationWeatherData.map((item) => (
+                <View key={item.key}>
+                  {item.icon ? 
+                    <View style={styles.conditionsContainer}>
+                      <Text style={item.style}>{item.text}</Text>
+                      {item.icon}
+                    </View> 
+                    : 
+                    <Text style={item.style}>{item.text}</Text>
+                  }
+                </View>
+              ))}
+            </View>
+          ) : null}
+          {weatherData && (
+            <MapView
+              style={styles.map}
+              showsUserLocation={false}
+              region={{
+                latitude: weatherData.coord.lat,
+                longitude: weatherData.coord.lon,
+                latitudeDelta: 5.0,
+                longitudeDelta: 5.0,
+              }}
+            >
+              <Marker
+                coordinate={{
+                  latitude: weatherData.coord.lat,
+                  longitude: weatherData.coord.lon,
+                }}
+              />
+            </MapView>
+          )}         
+        </ScrollView>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

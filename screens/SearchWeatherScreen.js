@@ -7,6 +7,7 @@ import getWeather from '../api.js';
 import { weatherType } from '../weatherType.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
+import { getWeatherIcon, getWindDirection } from '../weatherUtils.js';
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -33,38 +34,13 @@ const SearchWeatherScreen = () => {
   }
 };
 
-// Returns weather icon based on weather type
-const getWeatherIcon = () => {
-  if (!weather) {
-    return null;
-  }
 
-  const { main: type } = weather.weather[0];
-  const { icon, backgroundColor } = weatherType[type];
-
-  return { icon, backgroundColor };
-};
-
-const iconData = getWeatherIcon();
-
-
-// Returns wind direction letters
-const getWindDirection = (degrees) => {
-  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  const index = Math.round(degrees / 45) % 8;
-  return directions[index];
-};
-
-// Wind direction 
+const iconData = getWeatherIcon(weather);
 const windDirection = getWindDirection(weather?.wind.deg);
-
-// If wind gust is not available, set it to 0
-const windGust = weather?.wind.gust ? weather.wind.gust : 0;
-
 const navigation = useNavigation();
 
 // Layout of weather data
-const weatherData = weather ? [
+const searchWeatherData = weather ? [
   { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
   { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z'), style: styles.localTime },
   { 
@@ -103,8 +79,8 @@ const weatherData = weather ? [
           {error ? (
             <Text style={styles.error}>{error}</Text>
           ) : weather ? (
-            <View style={styles.weatherData}>
-              {weatherData.map((item) => (
+            <View style={styles.searchWeatherData}>
+              {searchWeatherData.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
                     <View style={styles.conditionsContainer}>
@@ -208,7 +184,7 @@ const styles = StyleSheet.create({
   error: {
     color: 'red',
   },
-  weatherData: {
+  searchWeatherData: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -271,4 +247,5 @@ const styles = StyleSheet.create({
   },
 });
 
+export { styles };
 export default SearchWeatherScreen;
