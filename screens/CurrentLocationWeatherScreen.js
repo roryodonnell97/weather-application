@@ -1,14 +1,13 @@
 import * as Location from 'expo-location';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button  } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Image  } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment-timezone';
 import getWeather from '../api.js';
-import { weatherType } from '../weatherType.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-import { getWeatherIcon, getWindDirection } from '../weatherUtils.js';
+import {  getWindDirection } from '../weatherUtils.js';
 import { styles } from './SearchWeatherScreen';
 
 // Load the Ionicons font
@@ -44,7 +43,7 @@ const CurrentLocationWeatherScreen = () => {
     })();
   }, []);
 
-  const iconData = getWeatherIcon(weatherData);
+  // State variables
   const windDirection = getWindDirection(weatherData?.wind.deg);
   const navigation = useNavigation();
 
@@ -55,7 +54,7 @@ const CurrentLocationWeatherScreen = () => {
     { 
       key: 'conditions', 
       text: weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1), 
-      icon: iconData && <Icon name={iconData.icon} size={70} color={iconData.backgroundColor} />, 
+      image: `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`,
       style: styles.conditions 
     },
     { key: 'temperature', text: `Temperature: ${((weatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
@@ -96,8 +95,14 @@ const CurrentLocationWeatherScreen = () => {
                       <Text style={item.style}>{item.text}</Text>
                       {item.icon}
                     </View> 
-                    : 
-                    <Text style={item.style}>{item.text}</Text>
+                    : item.image ? 
+                    <View style={styles.imageContainer}>
+                      <Text style={styles.imageText}>{item.text}</Text>
+                      <Image 
+                      source={{ uri: item.image }} style={styles.image} />
+                    </View>
+                      : 
+                      <Text style={item.style}>{item.text}</Text>
                   }
                 </View>
               ))}
