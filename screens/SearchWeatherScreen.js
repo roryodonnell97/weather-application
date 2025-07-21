@@ -59,11 +59,14 @@ const searchWeatherData = weather ? [
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
-          <View>
-            <Button title="Current Location" onPress={() => navigation.navigate('CurrentLocationWeatherScreen')} />
+          <View style={styles.currentLocationButtonView}>
+            <TouchableOpacity style={styles.currentLocationButton} onPress={() => navigation.navigate('CurrentLocationWeatherScreen')}>
+              <Text>Current Location </Text>
+              <Icon name={"navigate-outline"} size={16} color="#000" />
+            </TouchableOpacity>
           </View>
           <View style={styles.instructions}>
-            <Text style={styles.header}>Enter Location</Text>
+            <Text style={styles.header}>Search Location</Text>
             <TextInput
               style={styles.input}
               value={location}
@@ -71,7 +74,8 @@ const searchWeatherData = weather ? [
               placeholder="City, State or Zip Code"
             />
             <TouchableOpacity style={styles.getWeatherbutton} onPress={getWeatherData}>
-              <Text>Search</Text>
+              <Text>Search </Text>
+              <Icon name={"search-outline"} size={16} color="#000" />
             </TouchableOpacity>
           </View>
           {error ? (
@@ -153,11 +157,27 @@ const styles = StyleSheet.create({
   },
   getWeatherbutton: {
     alignItems: 'center',
-    backgroundColor: 'cyan',
+    flexDirection: 'row',
+    backgroundColor: 'lightgreen',
     padding: 10,
     borderRadius: 5,
     marginTop: 10,
     marginBottom: 30,
+  },
+  currentLocationButton: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'lightgreen',
+    padding: 10,
+    borderRadius: 20,
+    borderColor: 'black',
+    borderWidth: 1,
+    width: 150,
+  },
+  currentLocationButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+
   },
   header: {
     fontSize: 24,
