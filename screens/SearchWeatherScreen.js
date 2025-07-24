@@ -13,44 +13,44 @@ Icon.loadFont();
 
 // State variables
 const SearchWeatherScreen = () => {
-  const [location, setLocation] = useState('');
-  const [weather, setWeather] = useState(null);
+  const [searchLocationWeatherData, setSearchLocationWeatherData] = useState(null);
+  const [searchLocation, setSearchLocation] = useState('');
   const [error, setError] = useState(null);
 
   // Updates location when user enters text
   const handleLocationChange = (text) => {
-    setLocation(text);
+    setSearchLocation(text);
     setError(null);
   };
 
   // Fetch weather data from API
   const getWeatherData = async () => {
     try {
-      const data = await getWeather(location);
-      setWeather(data);
+      const data = await getWeather(searchLocation);
+      setSearchLocationWeatherData(data);
     } catch (error) {
     setError(error.message);
   }
 };
 
 // State variables
-const windDirection = getWindDirection(weather?.wind.deg);
+const windDirection = getWindDirection(searchLocationWeatherData?.wind.deg);
 const navigation = useNavigation();
 
 // Layout of weather data
-const searchWeatherData = weather ? [
-  { key: 'location', text: `${weather.name}, ${weather.sys.country}`, style: styles.location },
-  { key: 'localTime', text: moment().utcOffset(weather.timezone / 60).format('h:mm A z'), style: styles.localTime },
+const searchLocationWeatherLayout = searchLocationWeatherData ? [
+  { key: 'location', text: `${searchLocationWeatherData.name}, ${searchLocationWeatherData.sys.country}`, style: styles.searchLocation },
+  { key: 'localTime', text: moment().utcOffset(searchLocationWeatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
   { 
     key: 'conditions', 
-    text: weather.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1), 
-    image: `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`,
+    text: searchLocationWeatherData.weather[0].description.charAt(0).toUpperCase() + searchLocationWeatherData.weather[0].description.slice(1), 
+    image: `https://openweathermap.org/img/wn/${searchLocationWeatherData.weather[0].icon}@2x.png`,
     style: styles.conditions 
   },
-  { key: 'temperature', text: `Temperature: ${((weather.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weather.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
+  { key: 'temperature', text: `Temperature: ${((searchLocationWeatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((searchLocationWeatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
   { key: 'wind',
-    icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weather.wind.deg}deg` }] }]} />,
-    text: `Wind: ${weather.wind.speed} mph    Direction: ${windDirection}`, 
+    icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${searchLocationWeatherData.wind.deg}deg` }] }]} />,
+    text: `Wind: ${searchLocationWeatherData.wind.speed} mph    Direction: ${windDirection}`, 
     style: styles.wind 
   },
 ] : [];
@@ -69,7 +69,7 @@ const searchWeatherData = weather ? [
             <Text style={styles.header}>Search Location</Text>
             <TextInput
               style={styles.input}
-              value={location}
+              value={searchLocation}
               onChangeText={handleLocationChange}
               placeholder="City, State or Zip Code"
             />
@@ -80,9 +80,9 @@ const searchWeatherData = weather ? [
           </View>
           {error ? (
             <Text style={styles.error}>{error}</Text>
-          ) : weather ? (
+          ) : searchLocationWeatherData ? (
             <View style={styles.searchWeatherData}>
-              {searchWeatherData.map((item) => (
+              {searchLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
                     <View style={styles.conditionsContainer}>
@@ -102,21 +102,21 @@ const searchWeatherData = weather ? [
               ))}
             </View>
           ) : null}
-          {weather && (
+          {searchLocationWeatherData && (
             <MapView
               style={styles.map}
               showsUserLocation={false}
               region={{
-                latitude: weather.coord.lat,
-                longitude: weather.coord.lon,
+                latitude: searchLocationWeatherData.coord.lat,
+                longitude: searchLocationWeatherData.coord.lon,
                 latitudeDelta: 5.0,
                 longitudeDelta: 5.0,
               }}
             >
               <Marker
                 coordinate={{
-                  latitude: weather.coord.lat,
-                  longitude: weather.coord.lon,
+                  latitude: searchLocationWeatherData.coord.lat,
+                  longitude: searchLocationWeatherData.coord.lon,
                 }}
               />
             </MapView>

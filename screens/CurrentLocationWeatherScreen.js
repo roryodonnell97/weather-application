@@ -14,8 +14,8 @@ import { styles } from './SearchWeatherScreen';
 Icon.loadFont();
 
 const CurrentLocationWeatherScreen = () => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [currentLocationWeatherData, setCurrentLocationWeatherData] = useState(null);
+  const [currentLocation, setCurrentLocation] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -27,15 +27,15 @@ const CurrentLocationWeatherScreen = () => {
           return;
         }
 
-        const location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
+        const currentLocation = await Location.getCurrentPositionAsync({});
+        setCurrentLocation(currentLocation);
 
-        console.log('Location:', location);
+        console.log('Location:', currentLocation);
 
         // Pass location object to getWeather function
-        const weatherData = await getWeather({ lat: location.coords.latitude, lon: location.coords.longitude });
-        console.log('Weather Data:', weatherData);
-        setWeatherData(weatherData);
+        const currentLocationWeatherData = await getWeather({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
+        console.log('Weather Data:', currentLocationWeatherData);
+        setCurrentLocationWeatherData(currentLocationWeatherData);
       } catch (error) {
         console.error('Error:', error);
         setError(error.message);
@@ -44,23 +44,23 @@ const CurrentLocationWeatherScreen = () => {
   }, []);
 
   // State variables
-  const windDirection = getWindDirection(weatherData?.wind.deg);
+  const windDirection = getWindDirection(currentLocationWeatherData?.wind.deg);
   const navigation = useNavigation();
 
   // Layout of weather data
-  const currentLocationWeatherData = weatherData ? [
-    { key: 'location', text: `${weatherData.name}, ${weatherData.sys.country}`, style: styles.location },
-    { key: 'localTime', text: moment().utcOffset(weatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
+  const currentLocationWeatherLayout = currentLocationWeatherData ? [
+    { key: 'location', text: `${currentLocationWeatherData.name}, ${currentLocationWeatherData.sys.country}`, style: styles.location },
+    { key: 'localTime', text: moment().utcOffset(currentLocationWeatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
     { 
       key: 'conditions', 
-      text: weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1), 
-      image: `https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`,
+      text: currentLocationWeatherData.weather[0].description.charAt(0).toUpperCase() + currentLocationWeatherData.weather[0].description.slice(1), 
+      image: `https://openweathermap.org/img/wn/${currentLocationWeatherData.weather[0].icon}@2x.png`,
       style: styles.conditions 
     },
-    { key: 'temperature', text: `Temperature: ${((weatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
+    { key: 'temperature', text: `Temperature: ${((currentLocationWeatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((currentLocationWeatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
     { key: 'wind',
-      icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weatherData.wind.deg}deg` }] }]} />,
-      text: `Wind: ${weatherData.wind.speed} mph    Direction: ${windDirection}`, 
+      icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${currentLocationWeatherData.wind.deg}deg` }] }]} />,
+      text: `Wind: ${currentLocationWeatherData.wind.speed} mph    Direction: ${windDirection}`, 
       style: styles.wind 
     },
   ] : [];
@@ -73,7 +73,7 @@ const CurrentLocationWeatherScreen = () => {
     );
   }
 
-  if (!weatherData) {
+  if (!currentLocationWeatherData) {
     return [];
   }
 
@@ -86,9 +86,9 @@ const CurrentLocationWeatherScreen = () => {
           </View>
           {error ? (
             <Text style={styles.error}>{error}</Text>
-          ) : weatherData ? (
+          ) : currentLocationWeatherData ? (
             <View style={styles.searchWeatherData}>
-              {currentLocationWeatherData.map((item) => (
+              {currentLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
                     <View style={styles.conditionsContainer}>
@@ -108,21 +108,21 @@ const CurrentLocationWeatherScreen = () => {
               ))}
             </View>
           ) : null}
-          {weatherData && (
+          {currentLocationWeatherData && (
             <MapView
               style={styles.map}
               showsUserLocation={false}
               region={{
-                latitude: weatherData.coord.lat,
-                longitude: weatherData.coord.lon,
+                latitude: currentLocationWeatherData.coord.lat,
+                longitude: currentLocationWeatherData.coord.lon,
                 latitudeDelta: 5.0,
                 longitudeDelta: 5.0,
               }}
             >
               <Marker
                 coordinate={{
-                  latitude: weatherData.coord.lat,
-                  longitude: weatherData.coord.lon,
+                  latitude: currentLocationWeatherData.coord.lat,
+                  longitude: currentLocationWeatherData.coord.lon,
                 }}
               />
             </MapView>
