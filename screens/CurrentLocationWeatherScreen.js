@@ -14,34 +14,37 @@ import { styles } from './SearchWeatherScreen';
 Icon.loadFont();
 
 const CurrentLocationWeatherScreen = () => {
+  
   const [currentLocationWeatherData, setCurrentLocationWeatherData] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [error, setError] = useState(null);
 
+  // Call getCurrentLocationWeatherData when component mounts (when screen is navigated to)
+  // The empty dependency array [] ensures it is only called once and not on every re-render
   useEffect(() => {
-    (async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-          setError('Permission to access location was denied');
-          return;
-        }
-
-        const currentLocation = await Location.getCurrentPositionAsync({});
-        setCurrentLocation(currentLocation);
-
-        console.log('Location:', currentLocation);
-
-        // Pass location object to getWeather function
-        const currentLocationWeatherData = await getWeather({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
-        console.log('Weather Data:', currentLocationWeatherData);
-        setCurrentLocationWeatherData(currentLocationWeatherData);
-      } catch (error) {
-        console.error('Error:', error);
-        setError(error.message);
-      }
-    })();
+    getCurrentLocationWeatherData();
   }, []);
+
+  // Fetch weather data from API
+  const getCurrentLocationWeatherData = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setError('Permission to access location was denied');
+        return;
+      }
+
+      const currentLocation = await Location.getCurrentPositionAsync({});
+      setCurrentLocation(currentLocation);
+
+      console.log('Location:', currentLocation);
+
+      const data = await getWeather({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
+      setCurrentLocationWeatherData(data);
+    } catch (error) {
+    setError(error.message);
+  }
+};
 
   // State variables
   const windDirection = getWindDirection(currentLocationWeatherData?.wind.deg);

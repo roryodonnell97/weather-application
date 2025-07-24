@@ -7,12 +7,14 @@ import getWeather from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import {  getWindDirection } from '../weatherUtils.js';
+import { getSearchLocationWeatherData } from './CurrentLocationWeatherScreen.js';
 
 // Load the Ionicons font
 Icon.loadFont();
 
 // State variables
 const SearchWeatherScreen = () => {
+  
   const [searchLocationWeatherData, setSearchLocationWeatherData] = useState(null);
   const [searchLocation, setSearchLocation] = useState('');
   const [error, setError] = useState(null);
@@ -24,7 +26,7 @@ const SearchWeatherScreen = () => {
   };
 
   // Fetch weather data from API
-  const getWeatherData = async () => {
+  const getSearchLocationWeatherData = async () => {
     try {
       const data = await getWeather(searchLocation);
       setSearchLocationWeatherData(data);
@@ -73,7 +75,7 @@ const searchLocationWeatherLayout = searchLocationWeatherData ? [
               onChangeText={handleLocationChange}
               placeholder="City, State or Zip Code"
             />
-            <TouchableOpacity style={styles.getWeatherbutton} onPress={getWeatherData}>
+            <TouchableOpacity style={styles.getWeatherbutton} onPress={getSearchLocationWeatherData}>
               <Text>Search </Text>
               <Icon name={"search-outline"} size={16} color="#000" />
             </TouchableOpacity>
