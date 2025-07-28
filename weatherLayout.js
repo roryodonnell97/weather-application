@@ -1,10 +1,12 @@
 import moment from 'moment-timezone';
 import { getWindDirection } from './weatherUtils.js';
-import { styles } from './screens/SearchWeatherScreen';
+import { styles } from './styles.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const getWeatherLayout = (weatherData) => {
-  if (!weatherData) return [];
+    if (!weatherData) {
+        return [];
+      }
 
   return [
     { key: 'location', text: `${weatherData.name}, ${weatherData.sys.country}`, style: styles.location },

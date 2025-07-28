@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import getWeather from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from './SearchWeatherScreen';
+import { styles } from '../styles.js';
 import getWeatherLayout from '../weatherLayout.js';
 
 // Load the Ionicons font
