@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Image  } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import moment from 'moment-timezone';
 import getWeather from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-import {  getWindDirection } from '../weatherUtils.js';
 import { styles } from './SearchWeatherScreen';
+import getWeatherLayout from '../weatherLayout.js';
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -46,27 +45,11 @@ const CurrentLocationWeatherScreen = () => {
   }
 };
 
-  // State variables
-  const windDirection = getWindDirection(currentLocationWeatherData?.wind.deg);
+  // Screen navigation
   const navigation = useNavigation();
 
   // Layout of weather data
-  const currentLocationWeatherLayout = currentLocationWeatherData ? [
-    { key: 'location', text: `${currentLocationWeatherData.name}, ${currentLocationWeatherData.sys.country}`, style: styles.location },
-    { key: 'localTime', text: moment().utcOffset(currentLocationWeatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
-    { 
-      key: 'conditions', 
-      text: currentLocationWeatherData.weather[0].description.charAt(0).toUpperCase() + currentLocationWeatherData.weather[0].description.slice(1), 
-      image: `https://openweathermap.org/img/wn/${currentLocationWeatherData.weather[0].icon}@2x.png`,
-      style: styles.conditions 
-    },
-    { key: 'temperature', text: `Temperature: ${((currentLocationWeatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((currentLocationWeatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
-    { key: 'wind',
-      icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${currentLocationWeatherData.wind.deg}deg` }] }]} />,
-      text: `Wind: ${currentLocationWeatherData.wind.speed} mph    Direction: ${windDirection}`, 
-      style: styles.wind 
-    },
-  ] : [];
+  const currentLocationWeatherLayout = getWeatherLayout(currentLocationWeatherData);
 
   if (error) {
     return (

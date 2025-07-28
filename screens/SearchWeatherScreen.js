@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Image   } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import moment from 'moment-timezone';
 import getWeather from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
-import {  getWindDirection } from '../weatherUtils.js';
-import { getSearchLocationWeatherData } from './CurrentLocationWeatherScreen.js';
+import getWeatherLayout from '../weatherLayout.js';
+
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -35,27 +34,11 @@ const SearchWeatherScreen = () => {
   }
 };
 
-// State variables
-const windDirection = getWindDirection(searchLocationWeatherData?.wind.deg);
+// Screen navigation
 const navigation = useNavigation();
 
 // Layout of weather data
-const searchLocationWeatherLayout = searchLocationWeatherData ? [
-  { key: 'location', text: `${searchLocationWeatherData.name}, ${searchLocationWeatherData.sys.country}`, style: styles.location },
-  { key: 'localTime', text: moment().utcOffset(searchLocationWeatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
-  { 
-    key: 'conditions', 
-    text: searchLocationWeatherData.weather[0].description.charAt(0).toUpperCase() + searchLocationWeatherData.weather[0].description.slice(1), 
-    image: `https://openweathermap.org/img/wn/${searchLocationWeatherData.weather[0].icon}@2x.png`,
-    style: styles.conditions 
-  },
-  { key: 'temperature', text: `Temperature: ${((searchLocationWeatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((searchLocationWeatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
-  { key: 'wind',
-    icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${searchLocationWeatherData.wind.deg}deg` }] }]} />,
-    text: `Wind: ${searchLocationWeatherData.wind.speed} mph    Direction: ${windDirection}`, 
-    style: styles.wind 
-  },
-] : [];
+const searchLocationWeatherLayout = getWeatherLayout(searchLocationWeatherData);
 
   return (
     <SafeAreaProvider>
