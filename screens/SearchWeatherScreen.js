@@ -41,7 +41,7 @@ const navigation = useNavigation();
 
 // Layout of weather data
 const searchLocationWeatherLayout = searchLocationWeatherData ? [
-  { key: 'location', text: `${searchLocationWeatherData.name}, ${searchLocationWeatherData.sys.country}`, style: styles.searchLocation },
+  { key: 'location', text: `${searchLocationWeatherData.name}, ${searchLocationWeatherData.sys.country}`, style: styles.location },
   { key: 'localTime', text: moment().utcOffset(searchLocationWeatherData.timezone / 60).format('h:mm A z'), style: styles.localTime },
   { 
     key: 'conditions', 
