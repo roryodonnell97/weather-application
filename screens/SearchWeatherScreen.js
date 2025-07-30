@@ -66,7 +66,7 @@ const searchLocationWeatherLayout = getWeatherLayout(searchLocationWeatherData);
           </View>
           {searchLocationWeatherData && (
             <View style={styles.searchWeatherData}>
-              {getWeatherLayout(searchLocationWeatherData).map((item) => (
+              {searchLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
                     <View style={styles.conditionsContainer}>

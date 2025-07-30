@@ -70,9 +70,7 @@ const CurrentLocationWeatherScreen = () => {
           <View style={styles.instructions}>
             <Text style={styles.header}>Current Location</Text>
           </View>
-          {error ? (
-            <Text style={styles.error}>{error}</Text>
-          ) : currentLocationWeatherData ? (
+          {currentLocationWeatherData && (
             <View style={styles.searchWeatherData}>
               {currentLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
@@ -93,7 +91,7 @@ const CurrentLocationWeatherScreen = () => {
                 </View>
               ))}
             </View>
-          ) : null}
+          )}
           {currentLocationWeatherData && (
             <MapView
               style={styles.map}
