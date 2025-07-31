@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Image   } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import getWeather from '../api.js';
+import { getWeather, getForecast } from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import getWeatherLayout from '../weatherLayout.js';
+import getForecastLayout from '../forecastLayout.js';
 import { styles } from '../styles.js';
 
 
 // Load the Ionicons font
 Icon.loadFont();
 
-// State variables
 const SearchWeatherScreen = () => {
   
+  // State variables
   const [searchLocationWeatherData, setSearchLocationWeatherData] = useState(null);
+  const [searchLocationForecastData, setSearchLocationForecastData] = useState(null);
   const [searchLocation, setSearchLocation] = useState('');
   const [error, setError] = useState(null);
 
@@ -25,11 +27,14 @@ const SearchWeatherScreen = () => {
     setError(null);
   };
 
-  // Fetch weather data from API
-  const getSearchLocationWeatherData = async () => {
+  // Fetch weather & forecast data from API
+  const getSearchLocationData = async () => {
     try {
-      const data = await getWeather(searchLocation);
-      setSearchLocationWeatherData(data);
+      const weatherData = await getWeather(searchLocation);
+      const forecastData = await getForecast(searchLocation);
+
+      setSearchLocationWeatherData(weatherData);
+      setSearchLocationForecastData(forecastData);
     } catch (error) {
     setError(error.message);
   }
@@ -38,8 +43,9 @@ const SearchWeatherScreen = () => {
 // Screen navigation
 const navigation = useNavigation();
 
-// Layout of weather data
+// Layout of weather & forecast data
 const searchLocationWeatherLayout = getWeatherLayout(searchLocationWeatherData);
+const searchLocationForecastLayout = getForecastLayout(searchLocationForecastData);
 
   return (
     <SafeAreaProvider>
@@ -59,7 +65,7 @@ const searchLocationWeatherLayout = getWeatherLayout(searchLocationWeatherData);
               onChangeText={handleLocationChange}
               placeholder="City, State or Zip Code"
             />
-            <TouchableOpacity style={styles.getWeatherbutton} onPress={getSearchLocationWeatherData}>
+            <TouchableOpacity style={styles.getWeatherbutton} onPress={getSearchLocationData}>
               <Text>Search </Text>
               <Icon name={"search-outline"} size={16} color="#000" />
             </TouchableOpacity>
@@ -84,6 +90,16 @@ const searchLocationWeatherLayout = getWeatherLayout(searchLocationWeatherData);
                     : 
                     <Text style={item.style}>{item.text}</Text>
                   }
+                </View>
+              ))}
+            </View>
+          )}
+          {searchLocationForecastData && (
+            <View>
+              <Text style={styles.header}>Forecast</Text>
+              {searchLocationForecastLayout.map((item) => (
+                <View key={item.key}>
+                  <Text style={item.style}>{item.text}</Text>
                 </View>
               ))}
             </View>
