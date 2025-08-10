@@ -83,7 +83,7 @@ const CurrentLocationWeatherScreen = () => {
                     <View style={styles.imageContainer}>
                       <Text style={styles.imageText}>{item.text}</Text>
                       <Image 
-                      source={{ uri: item.image }} style={styles.image} />
+                      source={{ uri: item.image }} style={styles.weatherImage} />
                     </View>
                       : 
                       <Text style={item.style}>{item.text}</Text>

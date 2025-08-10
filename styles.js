@@ -60,6 +60,14 @@ const styles = StyleSheet.create({
     color: 'black',
 
   },
+  forecastHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
+    color: 'black',
+    marginLeft: 15
+  },
   input: {
     width: 200,
     height: 40,

@@ -95,9 +95,9 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationForecastData && (
-            <View style={{ height: 200, overflow: 'hidden' }}>
-              <Text style={styles.header}>Forecast</Text>
-              <FlatList
+            <View style={{ height: 200, overflow: 'hidden', backgroundColor: 'white', borderRadius: 5 }}>
+              <Text style={styles.forecastHeader}>Forecast</Text>
+              <FlatList style={{ marginLeft : 10 }}
                 data={searchLocationForecastLayout}
                 renderItem={({ item, index }) => (
                   <View key={index}>
