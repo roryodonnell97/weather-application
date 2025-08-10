@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getWeather, getForecast } from '../api.js';
@@ -95,14 +95,18 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationForecastData && (
-            <ScrollView>
+            <View style={{ height: 200, overflow: 'hidden' }}>
               <Text style={styles.header}>Forecast</Text>
-              {searchLocationForecastLayout.map((item, index) => (
-                <View key={index}>
-                  {item}
-                </View>
-              ))}
-            </ScrollView>
+              <FlatList
+                data={searchLocationForecastLayout}
+                renderItem={({ item, index }) => (
+                  <View key={index}>
+                    {item}
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
           )}
           {searchLocationWeatherData && (
             <MapView
