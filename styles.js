@@ -151,9 +151,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginRight: 10,
   },
-  image: {
+  weatherImage: {
     width: 100,
     height: 100,
+  },
+  forecastImage: {
+    width: 55,
+    height: 50,
+  },
+  forecastTime: {
+    fontSize: 16,
+    width: 85
+  },
+  forecastTemperature: {
+    fontSize: 16,
   },
 });
 

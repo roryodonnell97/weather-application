@@ -84,7 +84,7 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
                       <Text style={styles.imageText}>{item.text}</Text>
                       <Image 
                         source={{ uri: item.image }}
-                        style={styles.image}
+                        style={styles.weatherImage}
                       />
                     </View> 
                     : 
@@ -95,14 +95,14 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationForecastData && (
-            <View>
+            <ScrollView>
               <Text style={styles.header}>Forecast</Text>
-              {searchLocationForecastLayout.map((item) => (
-                <View key={item.key}>
-                  <Text style={item.style}>{item.text}</Text>
+              {searchLocationForecastLayout.map((item, index) => (
+                <View key={index}>
+                  {item}
                 </View>
               ))}
-            </View>
+            </ScrollView>
           )}
           {searchLocationWeatherData && (
             <MapView
