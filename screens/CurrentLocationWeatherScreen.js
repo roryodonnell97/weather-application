@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Button, Image  } from 'react-native';
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { View, Text, ScrollView, Image  } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getWeather } from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
