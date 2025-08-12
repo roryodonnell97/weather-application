@@ -37,21 +37,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 30,
   },
-  currentLocationButton: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'lightgreen',
-    padding: 10,
-    borderRadius: 20,
-    borderColor: 'black',
-    borderWidth: 1,
-    width: 150,
-  },
-  currentLocationButtonView: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-
-  },
   header: {
     fontSize: 24,
     fontWeight: 'bold',

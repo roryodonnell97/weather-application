@@ -51,12 +51,6 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
-          <View style={styles.currentLocationButtonView}>
-            <TouchableOpacity style={styles.currentLocationButton} onPress={() => navigation.navigate('CurrentLocationWeatherScreen')}>
-              <Text>Current Location </Text>
-              <Icon name={"navigate-outline"} size={16} color="#000" />
-            </TouchableOpacity>
-          </View>
           <View style={styles.instructions}>
             <Text style={styles.header}>Search Location</Text>
             <TextInput

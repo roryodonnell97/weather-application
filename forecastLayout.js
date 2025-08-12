@@ -9,7 +9,7 @@ const getForecastLayout = (forecastData) => {
 
     const forecastLayout = [];
 
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 39; i++) {
       forecastLayout.push(
         <View key={`forecastTime_${i + 1}`} style={{ flexDirection: 'column', alignItems: 'center', marginRight: 15}}>
           <Text style={styles.forecastTime}>{moment.unix(forecastData.list[i].dt).format('ddd')}</Text>
