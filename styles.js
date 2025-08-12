@@ -165,14 +165,13 @@ const styles = StyleSheet.create({
   },
   forecastImage: {
     width: 55,
-    height: 50,
+    height: 55,
   },
   forecastTime: {
     fontSize: 16,
-    width: 85
   },
   forecastTemperature: {
-    fontSize: 16,
+    fontSize: 17,
   },
 });
 
