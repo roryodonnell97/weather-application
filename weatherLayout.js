@@ -2,6 +2,7 @@ import moment from 'moment-timezone';
 import { getWindDirection } from './weatherUtils.js';
 import { styles } from './styles.js';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { View } from 'react-native-animatable';
 
 const getWeatherLayout = (weatherData) => {
     if (!weatherData) {
@@ -18,10 +19,21 @@ const getWeatherLayout = (weatherData) => {
       style: styles.conditions 
     },
     { key: 'temperature', text: `Temperature: ${((weatherData.main.temp - 32) * (5 / 9)).toFixed(1)}°C    Feels like: ${((weatherData.main.feels_like - 32) * (5 / 9)).toFixed(1)}°C  `, style: styles.temperature },
-    { key: 'wind',
-      icon: <Icon name={"arrow-up-outline"} size={24} color="#000" style={[{ transform: [{ rotate: `${weatherData.wind.deg}deg` }] }]} />,
-      text: `Wind: ${weatherData.wind.speed} mph    Direction: ${getWindDirection(weatherData.wind.deg)}`, 
-      style: styles.wind 
+    {
+      key: 'wind',
+      icon: (
+        <View
+          style={[{ transform: [{ rotate: `${weatherData.wind.deg}deg` }] }]}
+          animation="fadeIn"
+          duration={500}
+          delay={500}
+          useNativeDriver={false}
+        >
+          <Icon name={"arrow-up-outline"} size={24} color="#000" />
+        </View>
+      ),
+      text: `Wind: ${weatherData.wind.speed} mph    Direction: ${getWindDirection(weatherData.wind.deg)}`,
+      style: styles.wind
     },
   ];
 };
