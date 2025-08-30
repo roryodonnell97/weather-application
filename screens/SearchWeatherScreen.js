@@ -53,16 +53,20 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
         <ScrollView style={styles.scrollView}>
           <View style={styles.instructions}>
             <Text style={styles.header}>Search Location</Text>
-            <TextInput
-              style={styles.input}
-              value={searchLocation}
-              onChangeText={handleLocationChange}
-              placeholder="City, State or Zip Code"
-            />
-            <TouchableOpacity style={styles.getWeatherbutton} onPress={getSearchLocationData}>
-              <Text>Search </Text>
-              <Icon name={"search-outline"} size={16} color="#000" />
-            </TouchableOpacity>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.input}
+                value={searchLocation}
+                onChangeText={handleLocationChange}
+                placeholder="City, State or Zip Code"
+              />
+              <TouchableOpacity
+                style={styles.getWeatherbutton}
+                onPress={getSearchLocationData}
+              >
+                <Icon name={"search-outline"} size={24} color="#000" />
+              </TouchableOpacity>
+            </View>
           </View>
           {searchLocationWeatherData && (
             <View style={styles.searchWeatherData}>

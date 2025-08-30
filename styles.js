@@ -28,40 +28,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  getWeatherbutton: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'lightgreen',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-    marginBottom: 30,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 20,
-    color: 'black',
-
-  },
-  forecastHeader: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 20,
-    color: 'black',
-    marginLeft: 15
-  },
-  input: {
-    width: 200,
-    height: 40,
+  searchContainer: {
     borderColor: 'gray',
     borderWidth: 1,
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -70,6 +42,35 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  input: {
+    width: 200,
+    height: 40,
+    padding: 10,
+    backgroundColor: 'white',
+  },
+  getWeatherbutton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'lightgrey',
+    width: 40,
+    height: 40,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
+    color: 'black',
+    alignSelf: 'center'
+  },
+  forecastHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    marginTop: 20,
+    color: 'black',
+    marginLeft: 15
   },
   error: {
     color: 'red',
