@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
+import { Text, TextInput, TouchableOpacity, ScrollView, Image, FlatList } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getWeather, getForecast } from '../api.js';
@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import getWeatherLayout from '../weatherLayout.js';
 import getForecastLayout from '../forecastLayout.js';
 import { styles } from '../styles.js';
-
+import { View } from 'react-native-animatable';
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -51,7 +51,7 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
-          <View style={styles.instructions}>
+          <View style={styles.instructions} animation="slideInDown" duration={750} delay={100}>
             <Text style={styles.header}>Search Location</Text>
             <View style={styles.searchContainer}>
               <TextInput
@@ -69,7 +69,7 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           </View>
           {searchLocationWeatherData && (
-            <View style={styles.searchWeatherData}>
+            <View style={styles.searchWeatherData} animation="slideInRight" duration={750} delay={100}>
               {searchLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
@@ -93,7 +93,7 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationForecastData && (
-            <View style={{ height: 200, overflow: 'hidden', backgroundColor: 'white', borderRadius: 5 }}>
+            <View style={styles.forecastContainer} animation="slideInLeft" duration={750} delay={100}>
               <Text style={styles.forecastHeader}>Forecast</Text>
               <FlatList 
                 horizontal

@@ -64,6 +64,12 @@ const styles = StyleSheet.create({
     color: 'black',
     alignSelf: 'center'
   },
+  forecastContainer: {
+    height: 200, 
+    overflow: 'hidden', 
+    backgroundColor: 'white', 
+    borderRadius: 5
+  },
   forecastHeader: {
     fontSize: 24,
     fontWeight: 'bold',
