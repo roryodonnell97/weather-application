@@ -19,6 +19,7 @@ const SearchWeatherScreen = () => {
   const [searchLocationWeatherData, setSearchLocationWeatherData] = useState(null);
   const [searchLocationForecastData, setSearchLocationForecastData] = useState(null);
   const [searchLocation, setSearchLocation] = useState('');
+  const [searchCount, setSearchCount] = useState(0);
   const [error, setError] = useState(null);
 
   // Updates location when user enters text
@@ -39,6 +40,8 @@ const SearchWeatherScreen = () => {
     setError(error.message);
   }
 };
+
+
 
 // Screen navigation
 const navigation = useNavigation();
@@ -62,14 +65,23 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
               />
               <TouchableOpacity
                 style={styles.getWeatherbutton}
-                onPress={getSearchLocationData}
+                onPress={() => {
+                  getSearchLocationData();
+                  setSearchCount(searchCount + 1);
+                }}
               >
                 <Icon name={"search-outline"} size={24} color="#000" />
               </TouchableOpacity>
             </View>
           </View>
           {searchLocationWeatherData && (
-            <View style={styles.searchWeatherData} animation="slideInRight" duration={750} delay={100}>
+            <View
+              key={`current-weather-data-${searchCount}`} // Add a unique key to force re-render
+              style={styles.searchWeatherData}
+              animation="zoomIn" // Animate on render
+              duration={500}
+              delay={200}
+            >
               {searchLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
@@ -93,7 +105,13 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationForecastData && (
-            <View style={styles.forecastContainer} animation="slideInLeft" duration={750} delay={100}>
+            <View
+              key={`forecast-weather-data-${searchCount}`} // Add a unique key to force re-render
+              style={styles.forecastContainer}
+              animation="zoomIn" // Animate on render
+              duration={500}
+              delay={200}
+            >
               <Text style={styles.forecastHeader}>Forecast</Text>
               <FlatList 
                 horizontal
@@ -109,23 +127,30 @@ const searchLocationForecastLayout = getForecastLayout(searchLocationForecastDat
             </View>
           )}
           {searchLocationWeatherData && (
-            <MapView
-              style={styles.map}
-              showsUserLocation={false}
-              region={{
-                latitude: searchLocationWeatherData.coord.lat,
-                longitude: searchLocationWeatherData.coord.lon,
-                latitudeDelta: 5.0,
-                longitudeDelta: 5.0,
-              }}
+            <View
+              key={`map-weather-data-${searchCount}`} // Add a unique key to force re-render
+              animation="zoomIn" // Animate on render
+              duration={500}
+              delay={200}
             >
-              <Marker
-                coordinate={{
+              <MapView
+                style={styles.map}
+                showsUserLocation={false}
+                region={{
                   latitude: searchLocationWeatherData.coord.lat,
                   longitude: searchLocationWeatherData.coord.lon,
+                  latitudeDelta: 5.0,
+                  longitudeDelta: 5.0,
                 }}
-              />
-            </MapView>
+              >
+                <Marker
+                  coordinate={{
+                    latitude: searchLocationWeatherData.coord.lat,
+                    longitude: searchLocationWeatherData.coord.lon,
+                  }}
+                />
+              </MapView>
+            </View>
           )}
         </ScrollView>
       </SafeAreaView>
