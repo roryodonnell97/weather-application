@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Image  } from 'react-native';
+import { Text, ScrollView, Image  } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { getWeather } from '../api.js';
@@ -8,6 +8,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../styles.js';
 import getWeatherLayout from '../weatherLayout.js';
+import { View } from 'react-native-animatable';
 
 // Load the Ionicons font
 Icon.loadFont();
@@ -67,11 +68,11 @@ const CurrentLocationWeatherScreen = () => {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView style={styles.scrollView}>
-          <View style={styles.instructions}>
+          <View style={styles.instructions} animation="slideInDown" duration={750} delay={100}>
             <Text style={styles.header}>Current Location</Text>
           </View>
           {currentLocationWeatherData && (
-            <View style={styles.searchWeatherData}>
+            <View style={styles.searchWeatherData} animation="slideInRight" duration={750} delay={100}>
               {currentLocationWeatherLayout.map((item) => (
                 <View key={item.key}>
                   {item.icon ? 
@@ -93,23 +94,29 @@ const CurrentLocationWeatherScreen = () => {
             </View>
           )}
           {currentLocationWeatherData && (
-            <MapView
-              style={styles.map}
-              showsUserLocation={false}
-              region={{
-                latitude: currentLocationWeatherData.coord.lat,
-                longitude: currentLocationWeatherData.coord.lon,
-                latitudeDelta: 5.0,
-                longitudeDelta: 5.0,
-              }}
+            <View 
+            animation="slideInLeft"
+            duration={750}
+            delay={100}
             >
-              <Marker
-                coordinate={{
+              <MapView
+                style={styles.map}
+                showsUserLocation={false}
+                region={{
                   latitude: currentLocationWeatherData.coord.lat,
                   longitude: currentLocationWeatherData.coord.lon,
+                  latitudeDelta: 5.0,
+                  longitudeDelta: 5.0,
                 }}
-              />
-            </MapView>
+              >
+                <Marker
+                  coordinate={{
+                    latitude: currentLocationWeatherData.coord.lat,
+                    longitude: currentLocationWeatherData.coord.lon,
+                  }}
+                />
+              </MapView>
+            </View>
           )}         
         </ScrollView>
       </SafeAreaView>
