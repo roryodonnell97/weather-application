@@ -1,13 +1,14 @@
 import * as Location from 'expo-location';
 import React, { useState, useEffect } from 'react';
-import { Text, ScrollView, Image  } from 'react-native';
+import { Text, ScrollView, Image, FlatList  } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { getWeather } from '../api.js';
+import { getWeather, getForecast } from '../api.js';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../styles.js';
 import getWeatherLayout from '../weatherLayout.js';
+import getForecastLayout from '../forecastLayout.js';
 import { View } from 'react-native-animatable';
 
 // Load the Ionicons font
@@ -16,6 +17,7 @@ Icon.loadFont();
 const CurrentLocationWeatherScreen = () => {
   
   const [currentLocationWeatherData, setCurrentLocationWeatherData] = useState(null);
+  const [currentLocationForecastData, setCurrentLocationForecastData] = useState(null);
   const [currentLocation, setCurrentLocation] = useState(null);
   const [error, setError] = useState(null);
 
@@ -39,8 +41,11 @@ const CurrentLocationWeatherScreen = () => {
 
       console.log('Location:', currentLocation);
 
-      const data = await getWeather({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
-      setCurrentLocationWeatherData(data);
+      const weatherData = await getWeather({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
+      const forecastData = await getForecast({ lat: currentLocation.coords.latitude, lon: currentLocation.coords.longitude });
+
+      setCurrentLocationWeatherData(weatherData);
+      setCurrentLocationForecastData(forecastData);
     } catch (error) {
     setError(error.message);
   }
@@ -51,6 +56,7 @@ const CurrentLocationWeatherScreen = () => {
 
   // Layout of weather data
   const currentLocationWeatherLayout = getWeatherLayout(currentLocationWeatherData);
+  const currentLocationForecastLayout = getForecastLayout(currentLocationForecastData);
 
   if (error) {
     return (
@@ -93,9 +99,25 @@ const CurrentLocationWeatherScreen = () => {
               ))}
             </View>
           )}
+          {currentLocationForecastLayout && (
+            <View style={styles.forecastContainer} animation="slideInLeft" duration={750} delay={100}>
+              <Text style={styles.forecastHeader}>Forecast</Text>
+              <FlatList 
+                horizontal
+                style={{ marginLeft : 10 }}
+                data={currentLocationForecastLayout}
+                renderItem={({ item, index }) => (
+                  <View key={index}>
+                    {item}
+                  </View>
+                )}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </View>
+          )}
           {currentLocationWeatherData && (
             <View 
-            animation="slideInLeft"
+            animation="slideInUp"
             duration={750}
             delay={100}
             >
